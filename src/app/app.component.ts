@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import {CommandModule} from "@angular/cli/src/command-builder/command-module";
 
 @Component({
   selector: 'app-root',
