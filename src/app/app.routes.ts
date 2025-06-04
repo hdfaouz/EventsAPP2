@@ -7,6 +7,7 @@ export const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: '', redirectTo: '/login', pathMatch: 'full' },
-  { path: 'add-event', component: AddEventComponent }
-];
+  { path: 'add-event', component: AddEventComponent },
+  { path: 'edit-event/:id', component:AddEventComponent}
+  ]
 

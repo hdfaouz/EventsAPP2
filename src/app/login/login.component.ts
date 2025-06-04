@@ -44,7 +44,7 @@ export class LoginComponent {
             // this.router.navigate(['/admin-dashboard']);
           }else {
             alert("welcome client")
-            // this.router.navigate(['user-dashboard']);
+            //this.router.navigate(['user-dashboard']);
           }
         },
         error: (err)=>{

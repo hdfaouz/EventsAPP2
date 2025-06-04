@@ -1,0 +1,11 @@
+<!-- Wrapper with flex: sidebar on left, events on right -->
+<div class="flex bg-gray-900 text-white min-h-screen">
+
+  <!-- Main Content: Event Cards -->
+  <main class="flex-1 p-6">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <app-event-card *ngFor="let event of events" [event]="event"    (deleted)="onEventDeleted($event)">
+      </app-event-card>
+    </div>
+  </main>
+</div>
