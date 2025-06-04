@@ -30,7 +30,7 @@ export class AuthService {
   }
 
   register(data: RegisterRequest): Observable<any> {
-    return this.http.post('${this.apiUrl}/register', data)
+    return this.http.post(`${this.apiUrl}/register`, data)
       .pipe(
         catchError(this.handleError)
       );
@@ -38,7 +38,7 @@ export class AuthService {
   }
 
   login(data: LoginRequest): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>('${this.apiUrl}/login', data)
+    return this.http.post<LoginResponse>(`${this.apiUrl}/login`, data)
       .pipe(catchError(this.handleError));
   }
 
