@@ -1,0 +1,27 @@
+<!-- navbar.component.html -->
+<mat-toolbar color="primary">
+  <mat-toolbar-row>
+    <!-- Logo/Titre -->
+    <span class="app-title">Mon App</span>
+
+    <!-- Spacer pour pousser les éléments à droite -->
+    <span class="spacer"></span>
+
+    <!-- Navigation buttons -->
+    <button mat-button (click)="navigateToEvents()">
+      <mat-icon>event</mat-icon>
+      <span class="button-text">Événements</span>
+    </button>
+
+    <button mat-button (click)="navigateToReservations()">
+      <mat-icon>book_online</mat-icon>
+      <span class="button-text">Réservations</span>
+    </button>
+
+    <!-- Logout button -->
+    <button mat-button (click)="logout()" class="logout-btn">
+      <mat-icon>logout</mat-icon>
+      <span class="button-text">Déconnexion</span>
+    </button>
+  </mat-toolbar-row>
+</mat-toolbar>
