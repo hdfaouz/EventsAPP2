@@ -1,27 +1,377 @@
-<!-- navbar.component.html -->
-<mat-toolbar color="primary">
-  <mat-toolbar-row>
-    <!-- Logo/Titre -->
-    <span class="app-title">Mon App</span>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Navbar</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-    <!-- Spacer pour pousser les éléments à droite -->
-    <span class="spacer"></span>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f5f6fa;
+      min-height: 100vh;
+    }
 
-    <!-- Navigation buttons -->
-    <button mat-button (click)="navigateToEvents()">
-      <mat-icon>event</mat-icon>
-      <span class="button-text">Événements</span>
-    </button>
+    .navbar {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: 15px 0;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
 
-    <button mat-button (click)="navigateToReservations()">
-      <mat-icon>book_online</mat-icon>
-      <span class="button-text">Réservations</span>
-    </button>
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
 
-    <!-- Logout button -->
-    <button mat-button (click)="logout()" class="logout-btn">
-      <mat-icon>logout</mat-icon>
-      <span class="button-text">Déconnexion</span>
-    </button>
-  </mat-toolbar-row>
-</mat-toolbar>
+    .nav-logo {
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: white;
+    }
+
+    .nav-buttons {
+      display: flex;
+      gap: 15px;
+      align-items: center;
+    }
+
+    .nav-btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 25px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+    }
+
+    .btn-event {
+      background: white;
+      color: #667eea;
+    }
+
+    .btn-event:hover {
+      background: #f8f9ff;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(255,255,255,0.3);
+    }
+
+    .btn-reservation {
+      background: rgba(255,255,255,0.2);
+      color: white;
+      border: 2px solid white;
+    }
+
+    .btn-reservation:hover {
+      background: white;
+      color: #764ba2;
+      transform: translateY(-2px);
+    }
+
+    .btn-logout {
+      background: #ff6b6b;
+      color: white;
+      margin-left: 10px;
+    }
+
+    .btn-logout:hover {
+      background: #ee5a52;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(255,107,107,0.3);
+    }
+
+    .icon {
+      width: 18px;
+      height: 18px;
+    }
+
+    /* Menu mobile */
+    .mobile-menu-btn {
+      display: none;
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    @media (max-width: 768px) {
+      .nav-buttons {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        flex-direction: column;
+        padding: 20px;
+        gap: 10px;
+      }
+
+      .nav-buttons.active {
+        display: flex;
+      }
+
+      .mobile-menu-btn {
+        display: block;
+      }
+
+      .nav-btn {
+        width: 100%;
+        justify-content: center;
+        padding: 15px 20px;
+      }
+
+      .nav-logo {
+        font-size: 1.5rem;
+      }
+    }
+
+    /* Contenu de la page pour montrer que la navbar fonctionne */
+    .content {
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .content h1 {
+      color: #333;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .content p {
+      color: #666;
+      text-align: center;
+      font-size: 1.1rem;
+      line-height: 1.6;
+    }
+
+    /* Listes cachées */
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: white;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      padding: 20px;
+      z-index: 999;
+    }
+
+    .dropdown-content.active {
+      display: block;
+    }
+
+    .list-item {
+      background: #f8f9fa;
+      padding: 15px;
+      margin: 10px 0;
+      border-radius: 8px;
+      border-left: 4px solid #667eea;
+    }
+
+    .list-title {
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 5px;
+    }
+
+    .list-date {
+      color: #666;
+      font-size: 0.9rem;
+    }
+
+    .add-btn {
+      background: #667eea;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 15px;
+    }
+
+    .add-btn:hover {
+      background: #5a67d8;
+    }
+  </style>
+</head>
+<body>
+<nav class="navbar">
+  <div class="nav-container">
+    <div class="nav-logo">MonApp</div>
+
+    <button class="mobile-menu-btn" onclick="toggleMobileMenu()">☰</button>
+
+    <div class="nav-buttons" id="navButtons">
+      <button class="nav-btn btn-event" onclick="toggleEventsList()">
+        <svg class="icon" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path>
+        </svg>
+        Événements
+      </button>
+
+      <button class="nav-btn btn-reservation" onclick="toggleReservationsList()">
+        <svg class="icon" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path>
+        </svg>
+        Réservations
+      </button>
+
+      <button class="nav-btn btn-logout" onclick="logout()">
+        <svg class="icon" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clip-rule="evenodd"></path>
+        </svg>
+        Déconnexion
+      </button>
+    </div>
+  </div>
+
+  <!-- Dropdown pour les événements -->
+  <div class="dropdown-content" id="eventsDropdown">
+    <h3 style="margin-bottom: 15px; color: #333;">Mes Événements</h3>
+    <div id="eventsContent">
+      <div class="list-item">
+        <div class="list-title">Conférence Tech 2025</div>
+        <div class="list-date">15 Juin 2025</div>
+      </div>
+      <div class="list-item">
+        <div class="list-title">Réunion équipe</div>
+        <div class="list-date">20 Juin 2025</div>
+      </div>
+    </div>
+    <button class="add-btn" onclick="addEvent()">+ Ajouter un événement</button>
+  </div>
+
+  <!-- Dropdown pour les réservations -->
+  <div class="dropdown-content" id="reservationsDropdown">
+    <h3 style="margin-bottom: 15px; color: #333;">Mes Réservations</h3>
+    <div id="reservationsContent">
+      <div class="list-item">
+        <div class="list-title">Salle de conférence A</div>
+        <div class="list-date">10 Juin 2025 - 14h00</div>
+      </div>
+      <div class="list-item">
+        <div class="list-title">Restaurant Le Jardin</div>
+        <div class="list-date">12 Juin 2025 - 19h30</div>
+      </div>
+    </div>
+    <button class="add-btn" onclick="addReservation()">+ Ajouter une réservation</button>
+  </div>
+</nav>
+
+<!-- Contenu de la page -->
+<div class="content">
+  <h1>Bienvenue sur votre application</h1>
+  <p>Utilisez la barre de navigation ci-dessus pour gérer vos événements et réservations.
+    Cliquez sur les boutons pour afficher les listes déroulantes avec vos données.</p>
+</div>
+
+<script>
+  let eventsData = [
+    { title: "Conférence Tech 2025", date: "15 Juin 2025" },
+    { title: "Réunion équipe", date: "20 Juin 2025" }
+  ];
+
+  let reservationsData = [
+    { title: "Salle de conférence A", date: "10 Juin 2025 - 14h00" },
+    { title: "Restaurant Le Jardin", date: "12 Juin 2025 - 19h30" }
+  ];
+
+  function toggleMobileMenu() {
+    const navButtons = document.getElementById('navButtons');
+    navButtons.classList.toggle('active');
+  }
+
+  function toggleEventsList() {
+    const eventsDropdown = document.getElementById('eventsDropdown');
+    const reservationsDropdown = document.getElementById('reservationsDropdown');
+
+    reservationsDropdown.classList.remove('active');
+    eventsDropdown.classList.toggle('active');
+  }
+
+  function toggleReservationsList() {
+    const eventsDropdown = document.getElementById('eventsDropdown');
+    const reservationsDropdown = document.getElementById('reservationsDropdown');
+
+    eventsDropdown.classList.remove('active');
+    reservationsDropdown.classList.toggle('active');
+  }
+
+  function addEvent() {
+    const title = prompt('Nom de l\'événement:');
+    const date = prompt('Date de l\'événement:');
+
+    if (title && date) {
+      eventsData.push({ title, date });
+      updateEventsList();
+    }
+  }
+
+  function addReservation() {
+    const title = prompt('Nom de la réservation:');
+    const date = prompt('Date et heure:');
+
+    if (title && date) {
+      reservationsData.push({ title, date });
+      updateReservationsList();
+    }
+  }
+
+  function updateEventsList() {
+    const content = document.getElementById('eventsContent');
+    content.innerHTML = eventsData.map(event =>
+      `<div class="list-item">
+                    <div class="list-title">${event.title}</div>
+                    <div class="list-date">${event.date}</div>
+                </div>`
+    ).join('');
+  }
+
+  function updateReservationsList() {
+    const content = document.getElementById('reservationsContent');
+    content.innerHTML = reservationsData.map(reservation =>
+      `<div class="list-item">
+                    <div class="list-title">${reservation.title}</div>
+                    <div class="list-date">${reservation.date}</div>
+                </div>`
+    ).join('');
+  }
+
+  function logout() {
+    if (confirm('Êtes-vous sûr de vouloir vous déconnecter ?')) {
+      alert('Déconnexion réussie !');
+      // Redirection possible vers page de connexion
+      // window.location.href = '/login';
+    }
+  }
+
+  // Fermer les dropdowns si on clique ailleurs
+  document.addEventListener('click', function(event) {
+    if (!event.target.closest('.navbar')) {
+      document.getElementById('eventsDropdown').classList.remove('active');
+      document.getElementById('reservationsDropdown').classList.remove('active');
+    }
+  });
+</script>
+</body>
+</html>
